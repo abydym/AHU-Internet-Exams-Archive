@@ -1,0 +1,72 @@
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
+
+#include <sys/socket.h> //套接字函数,如socket、bind、listen、accept、connect等
+#include <netinet/in.h> //网络地址结构体,如sockaddr_in
+#include <arpa/inet.h> //IP地址转换函数,如inet_addr、inet_ntop、inet_pton等
+#include <unistd.h> //标准输入输出函数,如read、write、close等
+#include <sys/shm.h> //共享内存函数,如shmget、shmat、shmdt等
+#include <sys/msg.h> //消息队列函数,如msgget、msgsnd、msgrcv、msgctl等
+#include <pthread.h> //线程函数,如pthread_create、pthread_self等
+#include <errno.h> //错误码函数,如errno、strerror等
+#include <sys/wait.h> //进程函数,如fork、waitpid等
+  
+socket(AF_INET, SOCK_STREAM, IPPROTO_TCP) //创建套接字,返回套接字描述符
+bind(fd, (struct sockaddr *)&addr, sizeof(addr)) //绑定套接字
+listen(fd, 128) //监听套接字,参数为监听队列长度
+accept(fd, (struct sockaddr *)&addr, &len) //接受连接,返回已连接套接字描述符
+connect(fd, (struct sockaddr *)&addr, sizeof(addr)) //连接套接字,参数为服务器地址和端口
+read(fd, buf, sizeof(buf)) //读取数据,参数为套接字描述符、缓冲区、缓冲区大小
+write(fd, buf, sizeof(buf)) //写入数据,参数为套接字描述符、缓冲区、缓冲区大小
+fread(buff, sizeof(char), sizeof(buff), fp) //从文件中读取数据,参数为缓冲区、缓冲区大小、文件指针
+fwrite(buff, sizeof(char), bytes_read, fp) //向文件中写入数据,参数为缓冲区、缓冲区大小、文件指针
+close(confd) //关闭套接字,参数为套接字描述符
+fopen("file.txt", "rb") //打开文件,参数为文件名和打开模式
+fclose(fp) //关闭文件,参数为文件指针
+struct sockaddr_in addr; //定义套接字地址结构体
+addr.sin_family = AF_INET; //设置地址族
+addr.sin_port = htons(8080); //设置端口号,使用htons函数将主机字节序转换为网络字节序
+addr.sin_addr.s_addr = inet_addr("192.168.1.1"); //设置IP地址,使用inet_addr函数将点分十进制IP地址转换为网络字节序
+inet_ntop(AF_INET, &addr.sin_addr, str, sizeof(str)); //将网络字节序IP地址转换为点分十进制IP地址,参数为地址族、网络字节序IP地址、缓冲区、缓冲区大小
+socklen_t len; //定义套接字地址结构体长度
+pid_t pid = fork(); //创建子进程,返回子进程ID
+htonl(INADDR_ANY) //将主机字节序转换为网络字节序
+htons(8080) //将主机字节序转换为网络字节序
+inet_addr("192.168.1.1") //将点分十进制IP地址转换为网络字节序
+inet_ntop(AF_INET, &addr.sin_addr, str, sizeof(str)) //将网络字节序IP地址转换为点分十进制IP地址
+inet_pton(AF_INET, "192.168.1.1", &addr.sin_addr) //将点分十进制IP地址转换为网络字节序
+ntohl //将网络字节序转换为主机字节序
+ntohs //将网络字节序转换为主机字节序
+bzero(&buf, sizeof(buf)) //将缓冲区清零
+fgets(buf, sizeof(buf), stdin) //从标准输入读取一行数据,参数为缓冲区、缓冲区大小、标准输入
+fork() //创建子进程,返回子进程ID
+getpid() //获取当前进程ID
+getppid() //获取当前进程的父进程ID
+pthread_self() //获取当前线程ID
+pthread_t tid; //定义线程ID
+pthread_create(&tid, NULL, childThread, NULL) //创建线程,参数为线程ID、线程属性、线程函数、线程函数参数
+static void * childThread(void * arg) //定义线程函数,参数为线程函数参数
+{
+    int *confd = (int *)arg; //将线程函数参数转换为整数指针
+}
+sleep(1) //睡眠1秒
+struct msg_st{ //定义消息结构体
+    long int msg_type; //消息类型
+    char buff[BUFSIZ]; //消息内容
+};
+msgget((key_t)5312, 0666 | IPC_CREAT); //创建消息队列,参数为键值、权限、创建标志
+msgsnd(msg_id, (void *)&msg, sizeof(buff), 0); //发送消息,参数为消息队列ID、消息指针、消息大小、发送标志
+msgrcv(msg_id, (void *)&msg, sizeof(buff),msg_type, 0); //接收消息,参数为消息队列ID、消息指针、消息大小、消息类型、接收标志
+msgctl(msg_id, IPC_RMID, NULL); //删除消息队列,参数为消息队列ID、操作标志、操作参数
+shmget((key_t)KEY, SHARED_MEMORY_SIZE, IPC_CREAT | 0666) //创建共享内存,参数为键值、共享内存大小、创建标志
+shmat(shm_id, NULL, 0) //附加共享内存,参数为共享内存ID、共享内存地址、附加标志
+shmdt(shmaddr) //分离共享内存,参数为共享内存地址
+shmctl(shm_id, IPC_RMID, NULL) //删除共享内存,参数为共享内存ID、操作标志、操作参数
+pthread_mutex_t mutex; //定义互斥锁
+pthread_mutex_lock(&shmadd->mutex); //加锁
+pthread_mutex_unlock(&shmadd->mutex); //解锁
+pthread_mutex_init(&shmadd->mutex, NULL); //初始化互斥锁
+pthread_mutex_destroy(&shmadd->mutex); //销毁互斥锁
+wait(NULL) //等待子进程结束,参数为子进程终止状态指针
+pthread_join(tid, NULL) //等待线程结束,参数为线程ID、线程终止状态指针
